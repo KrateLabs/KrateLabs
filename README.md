@@ -11,3 +11,4 @@ Whether you wish to preserve cityscapes or familiar places, Krate Labs is here t
 ## Mapbox Styles
 
 - mapbox://styles/bradonl/cikesitmj00cd9slyjxj4lgiv
+- public key: pk.eyJ1IjoiYnJhZG9ubCIsImEiOiI5eGxCNVdVIn0.tCI34d1oGPVIGD7JvxKRQw
