@@ -12,3 +12,38 @@ Whether you wish to preserve cityscapes or familiar places, Krate Labs is here t
 
 - mapbox://styles/bradonl/cikesitmj00cd9slyjxj4lgiv
 - public key: pk.eyJ1IjoiYnJhZG9ubCIsImEiOiI5eGxCNVdVIn0.tCI34d1oGPVIGD7JvxKRQw
+
+## How to build SVG
+
+### Build Full Features
+
+```
+python kratelabs.py \
+  --lng -79.380 \
+  --lat 43.652 \
+  --zoom 10 \
+  --style mapbox://styles/addxy/cilvpgjqs001k9om1ay3jmb75 \
+  --filename Full
+```
+
+### Build Roads
+
+```bash
+python kratelabs.py \
+  --lng -79.380 \
+  --lat 43.652 \
+  --zoom 10 \
+  --style mapbox://styles/addxy/cilvq1gtm00199llxxre3k6g9 \
+  --filename Roads
+```
+
+### Build Water
+
+```
+python kratelabs.py \
+  --lng -79.380 \
+  --lat 43.652 \
+  --zoom 10 \
+  --style mapbox://styles/addxy/cilvpgeq1001j9km8evgj1a1p \
+  --filename Water
+```
