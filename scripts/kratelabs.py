@@ -24,7 +24,7 @@ from PIL import Image
 @click.option('--attribution', is_flag=True, default=False, help='boolean value controlling whether there is attribution on the image; defaults to  false')
 @click.option('--logo', is_flag=True, default=False, help='boolean value controlling whether there is a Mapbox logo on the image; defaults to  false')
 @click.option('--upload', is_flag=True, default=False)
-@click.option('--delete', type=click.BOOL, default=True)
+@click.option('--delete', is_flag=True, default=False)
 
 def cli(filename, **kwargs):
     print('Building: {}...'.format(filename))
@@ -86,11 +86,11 @@ def create_svg(filename, **kwargs):
     # -s, --svg                  - SVG backend (scalable vector graphics)
     # -o, --output <filename>    - write all output to this file
     subprocess.call(['potrace', '--svg', '--output', '{}.svg'.format(filename), '{}.pnm'.format(filename)])
+    os.remove('{}.pnm'.format(filename))
 
     # Remove extra files that are not needed anymore
     if kwargs['delete']:
         os.remove('{}.png'.format(filename))
-        os.remove('{}.pnm'.format(filename))
 
 def upload_aws_s3(filename, **kwargs):
     """ Upload AWS S3 bucket """
