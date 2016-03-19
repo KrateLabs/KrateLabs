@@ -8,16 +8,22 @@ Our contemporary designs highlights the cartography as the focal point as we fus
 
 Whether you wish to preserve cityscapes or familiar places, Krate Labs is here to provide meaningful art purchases by allowing each user to choose a location that is meaningful to them. Simply choose from a variety of templates that we currently have, or send a custom request, we’re here to help you create your customized art piece for your home or business.
 
-## Mapbox Styles
-
-- mapbox://styles/bradonl/cikesitmj00cd9slyjxj4lgiv
-- public key: pk.eyJ1IjoiYnJhZG9ubCIsImEiOiI5eGxCNVdVIn0.tCI34d1oGPVIGD7JvxKRQw
-
 ## How to build SVG
 
 ### Build Full Features
 
+**Python (Ubuntu)**
+
+Install
+
+```bash
+$ sudo apt-get update && apt-get install potrace -y
+$ git clone git@github.com:KrateLabs/KrateLabs.git
+$ cd KrateLabs
+$ pip install -r requirements.txt
 ```
+
+```bash
 python kratelabs.py \
   --lng -79.380 \
   --lat 43.652 \
@@ -26,24 +32,37 @@ python kratelabs.py \
   --filename Full
 ```
 
-### Build Roads
+**Docker**
+
+Install
 
 ```bash
-python kratelabs.py \
+$ git clone git@github.com:KrateLabs/KrateLabs.git
+$ cd KrateLabs
+$ docker build kratelabs .
+```
+
+Running on Docker allows you to create map SVG from any Operating System without any issues.
+
+```bash
+docker run -it --rm -v $HOME/data:/data kratelabs \
+  python kratelabs.py \
   --lng -79.380 \
   --lat 43.652 \
   --zoom 10 \
-  --style mapbox://styles/addxy/cilvq1gtm00199llxxre3k6g9 \
-  --filename Roads
+  --style mapbox://styles/addxy/cilvpgjqs001k9om1ay3jmb75 \
+  --filename Full
 ```
+### Mapbox Styles
 
-### Build Water
+**All Features**
 
-```
-python kratelabs.py \
-  --lng -79.380 \
-  --lat 43.652 \
-  --zoom 10 \
-  --style mapbox://styles/addxy/cilvpgeq1001j9km8evgj1a1p \
-  --filename Water
-```
+- mapbox://styles/addxy/cilvpgjqs001k9om1ay3jmb75
+
+**Roads Only**
+
+- mapbox://styles/addxy/cilvq1gtm00199llxxre3k6g9
+
+**Water Only**
+
+- mapbox://styles/addxy/cilvpgeq1001j9km8evgj1a1p

@@ -2,6 +2,7 @@
 *.svg
 *.png
 *.pnm
+/data
 
 # Logs
 logs
