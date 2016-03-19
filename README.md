@@ -24,7 +24,8 @@ $ pip install -r requirements.txt
 ```
 
 ```bash
-python kratelabs.py \
+$ mkdir data
+$ python ./scripts/svg.py \
   --lng -79.380 \
   --lat 43.652 \
   --zoom 10 \
@@ -46,7 +47,7 @@ Running on Docker allows you to create map SVG from any Operating System without
 
 ```bash
 docker run -it --rm -v $HOME/data:/data kratelabs \
-  python kratelabs.py \
+  python svg.py \
   --lng -79.380 \
   --lat 43.652 \
   --zoom 10 \
