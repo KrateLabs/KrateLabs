@@ -11,6 +11,7 @@ import subprocess
 import click
 import os
 import requests
+import geocoder
 from PIL import Image
 
 
@@ -18,6 +19,7 @@ from PIL import Image
 @click.option('--filename', default='temp', help='Output filename to SVG')
 @click.option('--lat', type=click.FLOAT, help='latitude for the center point of the static map; number between  -90 and  90')
 @click.option('--lng', type=click.FLOAT, help='longitude for the center point of the static map; number between  -180 and  180')
+@click.option('--location', help='Geographical Location based on Google Maps')
 @click.option('--zoom', type=click.FLOAT, help='zoom level; number between  0 and  22 . Fractional zoom levels will be rounded to two decimal places.')
 @click.option('--width', type=click.IntRange(1, 1280), default=1280, help='width of the image in pixels')
 @click.option('--height', type=click.IntRange(1, 1280), default=1280, help='height of the image in pixels')
@@ -53,12 +55,13 @@ def get_mapbox_static(**kwargs):
         'logo': str(kwargs['logo']).lower(),
         'attribution': str(kwargs['attribution']).lower()
     }
+    lat, lng = get_latlng(**kwargs)
     url = 'https://api.mapbox.com/styles/v1/{username}/{style_id}/static/{lng},{lat},{zoom},{bearing},{pitch}/{width}x{height}{retina}'
     url = url.format(
         username=username,
         style_id=style_id,
-        lng=kwargs['lng'],
-        lat=kwargs['lat'],
+        lng=lng,
+        lat=lat,
         zoom=kwargs['zoom'],
         bearing=kwargs['bearing'],
         pitch=kwargs['pitch'],
@@ -69,6 +72,18 @@ def get_mapbox_static(**kwargs):
     response = requests.get(url, params=params, stream=True)
     response.raw.decode_content = True
     return response.raw
+
+
+def get_latlng(**kwargs):
+    """Gets Latitude & Longitude."""
+    if kwargs['location']:
+        g = geocoder.google(kwargs['location'])
+        if g.ok:
+            return g.latlng
+        else:
+            raise ValueError('Could not geocode address: {}'.format(g.location))
+    else:
+        return kwargs['lat'], kwargs['lng']
 
 
 def create_png(filename, **kwargs):
@@ -130,25 +145,26 @@ def parse_style(style):
 
 def check_options(**kwargs):
     """Verrify user input options."""
-    lat, lng, zoom = kwargs['lat'], kwargs['lng'], kwargs['zoom']
+    lat, lng, zoom, location = kwargs['lat'], kwargs['lng'], kwargs['zoom'], kwargs['location']
 
-    if not lat and not lng:
-        raise ValueError('Missing latitude & longitude')
+    if not location:
+        if not lat and not lng:
+            raise ValueError('Missing latitude & longitude')
 
-    elif not lat:
-        raise ValueError('Missing latitude')
+        elif not lat:
+            raise ValueError('Missing latitude')
 
-    elif not lng:
-        raise ValueError('Missing longitude')
+        elif not lng:
+            raise ValueError('Missing longitude')
 
-    elif not zoom:
+        elif not -90 < lat < 90:
+            raise ValueError('Latitude must be within -90 to 90 degrees.')
+
+        elif not -180 < lng < 180:
+            raise ValueError('Longitute must be within -180 to 180 degrees.')
+
+    if not zoom:
         raise ValueError('Missing zoom level')
-
-    elif not -90 < lat < 90:
-        raise ValueError('Latitude must be within -90 to 90 degrees.')
-
-    elif not -180 < lng < 180:
-        raise ValueError('Longitute must be within -180 to 180 degrees.')
 
     elif not 0 < zoom < 22:
         raise ValueError('Zoom level must be within 0 to 22.')
