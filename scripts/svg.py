@@ -25,8 +25,8 @@ from PIL import Image
 @click.option('--height', type=click.IntRange(1, 1280), default=1280, help='height of the image in pixels')
 @click.option('--style', default='mapbox://styles/addxy/cilvpgjqs001k9om1ay3jmb75', help='mapbox://styles/{username}/{style_id}')
 @click.option('--access_token', default='pk.eyJ1IjoiYWRkeHkiLCJhIjoiY2lsdmt5NjZwMDFsdXZka3NzaGVrZDZtdCJ9.ZUE-LebQgHaBduVwL68IoQ', help='Mapbox access token')
-@click.option('--bearing', type=click.FLOAT, default=0, help='bearing; number between  0 and  360 . Defaults to  0 .')
-@click.option('--pitch', type=click.FLOAT, default=0, help='pitch; number between  0 and  60 . Defaults to  0 .')
+@click.option('--bearing', type=click.FLOAT, default=0, help='Rotates the map around its center. Number between 0 and 360.')
+@click.option('--pitch', type=click.FLOAT, default=0, help='Tilts the map, producing a perspective effect. Number between 0 and 60.')
 @click.option('--retina', is_flag=True, default=True, help='If  @2x is added to request a retina 2x image will be returned')
 @click.option('--attribution', is_flag=True, default=False, help='boolean value controlling whether there is attribution on the image; defaults to  false')
 @click.option('--logo', is_flag=True, default=False, help='boolean value controlling whether there is a Mapbox logo on the image; defaults to  false')
@@ -75,7 +75,7 @@ def get_mapbox_static(**kwargs):
 
 
 def get_latlng(**kwargs):
-    """Gets Latitude & Longitude."""
+    """Latitude & Longitude."""
     if kwargs['location']:
         g = geocoder.google(kwargs['location'])
         if g.ok:
@@ -145,9 +145,10 @@ def parse_style(style):
 
 def check_options(**kwargs):
     """Verrify user input options."""
-    lat, lng, zoom, location = kwargs['lat'], kwargs['lng'], kwargs['zoom'], kwargs['location']
+    # Lat lng
+    if not kwargs['location']:
+        lat, lng = kwargs['lat'], kwargs['lng']
 
-    if not location:
         if not lat and not lng:
             raise ValueError('Missing latitude & longitude')
 
@@ -157,18 +158,24 @@ def check_options(**kwargs):
         elif not lng:
             raise ValueError('Missing longitude')
 
-        elif not -90 < lat < 90:
+        elif not -90 <= lat <= 90:
             raise ValueError('Latitude must be within -90 to 90 degrees.')
 
-        elif not -180 < lng < 180:
+        elif not -180 <= lng <= 180:
             raise ValueError('Longitute must be within -180 to 180 degrees.')
 
-    if not zoom:
+    # Zoom Level
+    if not kwargs['zoom']:
         raise ValueError('Missing zoom level')
 
-    elif not 0 < zoom < 22:
+    elif not 0 <= kwargs['zoom'] <= 22:
         raise ValueError('Zoom level must be within 0 to 22.')
 
+    elif not 0 <= kwargs['pitch'] <= 60:
+        raise ValueError('Pitch must be within 0 to 60 degrees.')
+
+    elif not 0 <= kwargs['bearing'] <= 360:
+        raise ValueError('Bearing must be within 0 to 360 degrees.')
 
 if __name__ == '__main__':
     cli()
