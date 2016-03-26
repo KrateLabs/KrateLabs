@@ -48,7 +48,7 @@ def get_filename(filename, **kwargs):
     elif kwargs['location']:
         return kwargs['location']
     else:
-        click.echo('[Error] Provide a --filename or --location \n')
+        click.echo('[ERROR] Provide a --filename or --location \n')
         cli(['--help'])
 
 
@@ -80,11 +80,12 @@ def create_png(filename, **kwargs):
         height=kwargs['height'],
         retina=('', '@2x')[kwargs['retina']]
     )
-    with open('{}.png'.format(filename), 'w') as handle:
+    with open('{}.png'.format(filename), 'wb') as handle:
         response = requests.get(url, params=params, stream=True)
 
         for block in response.iter_content(1024):
             handle.write(block)
+    click.echo('[OK] Created: {}.png'.format(filename))
 
 
 def get_latlng(**kwargs):
@@ -92,10 +93,10 @@ def get_latlng(**kwargs):
     if kwargs['location']:
         g = geocoder.google(kwargs['location'])
         if g.ok:
-            click.echo('Successfuly Geocoded: {} {}'.format(g.address, g.latlng))
+            click.echo('[OK] Geocoded: {} {}'.format(g.address, g.latlng))
             return g.latlng
         else:
-            click.echo('[Error] Could not geocode address: {} \n'.format(g.location))
+            click.echo('[ERROR] Could not geocode address: {} \n'.format(g.location))
             cli(['--help'])
     else:
         return kwargs['lat'], kwargs['lng']
@@ -117,10 +118,12 @@ def create_svg(filename, **kwargs):
     # -o, --output <filename>    - write all output to this file
     subprocess.call(['potrace', '--svg', '--output', '{}.svg'.format(filename), '{}.pnm'.format(filename)])
     os.remove('{}.pnm'.format(filename))
+    click.echo('[OK] Created: {}.svg'.format(filename))
 
     # Remove extra files that are not needed anymore
     if kwargs['delete']:
         os.remove('{}.png'.format(filename))
+        click.echo('[OK] Deleted: {}.png'.format(filename))
 
 
 def upload_aws_s3(filename, **kwargs):
@@ -154,40 +157,40 @@ def validate_options(**kwargs):
         lat, lng = kwargs['lat'], kwargs['lng']
 
         if not lat and not lng:
-            click.echo('[Error] Missing latitude & longitude \n')
+            click.echo('[ERROR] Missing latitude & longitude \n')
             cli(['--help'])
 
         elif not lat:
-            click.echo('[Error] Missing latitude \n')
+            click.echo('[ERROR] Missing latitude \n')
             cli(['--help'])
 
         elif not lng:
-            click.echo('[Error] Missing longitude \n')
+            click.echo('[ERROR] Missing longitude \n')
             cli(['--help'])
 
         elif not -90 <= lat <= 90:
-            click.echo('[Error] Latitude must be within -90 to 90 degrees. \n')
+            click.echo('[ERROR] Latitude must be within -90 to 90 degrees. \n')
             cli(['--help'])
 
         elif not -180 <= lng <= 180:
-            click.echo('[Error] Longitute must be within -180 to 180 degrees. \n')
+            click.echo('[ERROR] Longitute must be within -180 to 180 degrees. \n')
             cli(['--help'])
 
     # Zoom Level
     if not kwargs['zoom']:
-        click.echo('[Error] Missing zoom level \n')
+        click.echo('[ERROR] Missing zoom level \n')
         cli(['--help'])
 
     elif not 0 <= kwargs['zoom'] <= 22:
-        click.echo('[Error] Zoom level must be within 0 to 22. \n')
+        click.echo('[ERROR] Zoom level must be within 0 to 22. \n')
         cli(['--help'])
 
     elif not 0 <= kwargs['pitch'] <= 60:
-        click.echo('[Error] Pitch must be within 0 to 60 degrees. \n')
+        click.echo('[ERROR] Pitch must be within 0 to 60 degrees. \n')
         cli(['--help'])
 
     elif not 0 <= kwargs['bearing'] <= 360:
-        click.echo('[Error] Bearing must be within 0 to 360 degrees. \n')
+        click.echo('[ERROR] Bearing must be within 0 to 360 degrees. \n')
         cli(['--help'])
 
 if __name__ == '__main__':

@@ -3,7 +3,7 @@ MAINTAINER Denis Carriere - carriere.denis@gmail.com
 
 # Install Potrace
 RUN echo "http://nl.alpinelinux.org/alpine/edge/testing/" >> /etc/apk/repositories
-RUN apk add --update potrace-dev && rm -rf /var/cache/apk/*
+RUN apk add --update potrace imagemagick && rm -rf /var/cache/apk/*
 
 # Install Python Requirements
 ADD requirements.txt /code/requirements.txt
