@@ -12,32 +12,75 @@ Whether you wish to preserve cityscapes or familiar places, Krate Labs is here t
 
 ### Install with Docker
 
+Running on Docker allows you to create map SVG from any Operating System without any issues.
+
 ```bash
 $ git clone git@github.com:KrateLabs/KrateLabs.git
 $ cd KrateLabs
 $ docker build kratelabs .
 OR
-$ make docker
+$ make
 ```
 
-Running on Docker allows you to create map SVG from any Operating System without any issues.
+### Command Line Interface
+
+**Creating your first SVG**
 
 ```bash
 docker run -it --rm -v $HOME/data:/data kratelabs svg \
-  --location "Toronto, Ontario"
-  --zoom 12 \
-  --filename "Toronto"
+--location "Toronto, Ontario"
+--zoom 12 \
 ```
+
+Getting help
+
+```bash
+docker run -it --rm kratelabs
+```
+
+Available options for CLI
+
+```bash
+Command Line Interface.
+
+Options:
+--filename TEXT         Filename output to SVG
+--lat FLOAT             latitude for the center point of the static map;
+                        number between  -90 and  90
+--lng FLOAT             longitude for the center point of the static map;
+                        number between  -180 and  180
+--location TEXT         Geographical Location based on Google Maps
+--zoom FLOAT            zoom level; number between  0 and  22 . Fractional
+                        zoom levels will be rounded to two decimal places.
+--width INTEGER RANGE   width of the image in pixels
+--height INTEGER RANGE  height of the image in pixels
+--style TEXT            mapbox://styles/{username}/{style_id}
+--access_token TEXT     Mapbox access token
+--bearing FLOAT         Rotates the map around its center. Number between 0
+                        and 360.
+--pitch FLOAT           Tilts the map, producing a perspective effect.
+                        Number between 0 and 60.
+--retina                [boolean] If  @2x is added to request a retina 2x
+                        image will be returned
+--attribution           [boolean] Value controlling whether there is
+                        attribution on the image; defaults to  false
+--logo                  [boolean] Value controlling whether there is a
+                        Mapbox logo on the image; defaults to  false
+--upload                [boolean] Upload to AWS S3
+--delete                [boolean] Delete PNG
+--help                  Show this message and exit.
+```
+
 ### Mapbox Styles
 
 **All Features**
 
-- mapbox://styles/addxy/cilvpgjqs001k9om1ay3jmb75
+- mapbox://styles/addxy/cim6u5lfi00k2cwm23exyzjim
 
 **Roads Only**
 
-- mapbox://styles/addxy/cilvq1gtm00199llxxre3k6g9
+- mapbox://styles/addxy/cim6u8zc300om9jm05ku5zurt
 
 **Water Only**
 
-- mapbox://styles/addxy/cilvpgeq1001j9km8evgj1a1p
+- mapbox://styles/addxy/cim6u6b7t001l9klzpio0dhaa
