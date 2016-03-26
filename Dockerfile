@@ -1,12 +1,19 @@
-FROM python:wheezy
+FROM python:alpine
 MAINTAINER Denis Carriere - carriere.denis@gmail.com
 
-RUN pip install pip --upgrade
-RUN apt-get update && apt-get install potrace -y
+# Install Potrace
+RUN echo "http://nl.alpinelinux.org/alpine/edge/testing/" >> /etc/apk/repositories
+RUN apk add --update potrace-dev && rm -rf /var/cache/apk/*
 
-ADD ./scripts/requirements.txt .
+# Install Python Requirements
+ADD requirements.txt /code/requirements.txt
+WORKDIR /code
+RUN pip install pip --upgrade
 RUN pip install -r requirements.txt
 
-RUN mkdir /data
-ADD ./scripts .
-CMD [ "/bin/bash" ]
+# Install App
+ADD setup.py /code/setup.py
+ADD kratelabs /code/kratelabs
+RUN pip install .
+
+CMD svg --help

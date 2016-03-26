@@ -12,7 +12,6 @@ import click
 import os
 import requests
 import geocoder
-from PIL import Image
 
 
 @click.command()
@@ -23,15 +22,15 @@ from PIL import Image
 @click.option('--zoom', type=click.FLOAT, help='zoom level; number between  0 and  22 . Fractional zoom levels will be rounded to two decimal places.')
 @click.option('--width', type=click.IntRange(1, 1280), default=1280, help='width of the image in pixels')
 @click.option('--height', type=click.IntRange(1, 1280), default=1280, help='height of the image in pixels')
-@click.option('--style', default='mapbox://styles/addxy/cilvpgjqs001k9om1ay3jmb75', help='mapbox://styles/{username}/{style_id}')
+@click.option('--style', default='mapbox://styles/addxy/cim6u5lfi00k2cwm23exyzjim', help='mapbox://styles/{username}/{style_id}')
 @click.option('--access_token', default='pk.eyJ1IjoiYWRkeHkiLCJhIjoiY2lsdmt5NjZwMDFsdXZka3NzaGVrZDZtdCJ9.ZUE-LebQgHaBduVwL68IoQ', help='Mapbox access token')
 @click.option('--bearing', type=click.FLOAT, default=0, help='Rotates the map around its center. Number between 0 and 360.')
 @click.option('--pitch', type=click.FLOAT, default=0, help='Tilts the map, producing a perspective effect. Number between 0 and 60.')
-@click.option('--retina', is_flag=True, default=True, help='If  @2x is added to request a retina 2x image will be returned')
-@click.option('--attribution', is_flag=True, default=False, help='boolean value controlling whether there is attribution on the image; defaults to  false')
-@click.option('--logo', is_flag=True, default=False, help='boolean value controlling whether there is a Mapbox logo on the image; defaults to  false')
-@click.option('--upload', is_flag=True, default=False)
-@click.option('--delete', is_flag=True, default=False)
+@click.option('--retina', is_flag=True, default=True, help='[boolean] If  @2x is added to request a retina 2x image will be returned')
+@click.option('--attribution', is_flag=True, default=False, help='[boolean] Value controlling whether there is attribution on the image; defaults to  false')
+@click.option('--logo', is_flag=True, default=False, help='[boolean] Value controlling whether there is a Mapbox logo on the image; defaults to  false')
+@click.option('--upload', is_flag=True, default=False, help='[boolean] Upload to AWS S3')
+@click.option('--delete', is_flag=True, default=False, help='[boolean] Delete PNG')
 def cli(filename, **kwargs):
     """Command Line Interface."""
     print('Building: {}...'.format(filename))
@@ -41,7 +40,7 @@ def cli(filename, **kwargs):
     upload_aws_s3(filename, **kwargs)
 
 
-def get_mapbox_static(**kwargs):
+def create_png(filename, **kwargs):
     """Connect to Mapbox Static API.
 
     https://www.mapbox.com/api-documentation/#retrieve-a-static-map-from-a-style
@@ -69,9 +68,11 @@ def get_mapbox_static(**kwargs):
         height=kwargs['height'],
         retina=('', '@2x')[kwargs['retina']]
     )
-    response = requests.get(url, params=params, stream=True)
-    response.raw.decode_content = True
-    return response.raw
+    with open('{}.png'.format(filename), 'w') as handle:
+        response = requests.get(url, params=params, stream=True)
+
+        for block in response.iter_content(1024):
+            handle.write(block)
 
 
 def get_latlng(**kwargs):
@@ -86,17 +87,6 @@ def get_latlng(**kwargs):
         return kwargs['lat'], kwargs['lng']
 
 
-def create_png(filename, **kwargs):
-    """Create PNG.
-
-    Connects to Mapbox's Static API
-    Output: PNG <filename>
-    """
-    mapbox_static = get_mapbox_static(**kwargs)
-    image = Image.open(mapbox_static)
-    image.save('/data/{}.png'.format(filename))
-
-
 def create_svg(filename, **kwargs):
     """Create SVG.
 
@@ -105,24 +95,24 @@ def create_svg(filename, **kwargs):
     """
     # ImageMagick 6.8.9 - convert
     # Usage: convert [options ...] file [ [options ...] file ...] [options ...] file
-    subprocess.call(['convert', '/data/{}.png'.format(filename), '/data/{}.pnm'.format(filename)])
+    subprocess.call(['convert', '{}.png'.format(filename), '{}.pnm'.format(filename)])
 
     # potrace 1.12. Transforms bitmaps into vector graphics.
     # <filename>                 - an input file
     # -s, --svg                  - SVG backend (scalable vector graphics)
     # -o, --output <filename>    - write all output to this file
-    subprocess.call(['potrace', '--svg', '--output', '/data/{}.svg'.format(filename), '/data/{}.pnm'.format(filename)])
-    os.remove('/data/{}.pnm'.format(filename))
+    subprocess.call(['potrace', '--svg', '--output', '{}.svg'.format(filename), '{}.pnm'.format(filename)])
+    os.remove('{}.pnm'.format(filename))
 
     # Remove extra files that are not needed anymore
     if kwargs['delete']:
-        os.remove('/data/{}.png'.format(filename))
+        os.remove('{}.png'.format(filename))
 
 
 def upload_aws_s3(filename, **kwargs):
     """Upload AWS S3 bucket."""
     if kwargs['upload']:
-        filename = '/data/{}.svg'.format(filename)
+        filename = '{}.svg'.format(filename)
         s3_bucket = 'kratelabs.com'
         s3_path = 's3://{}/{}'.format(s3_bucket, filename)
         command = ['aws', 's3', 'cp', filename, s3_path, '--acl', 'public-read-write']
