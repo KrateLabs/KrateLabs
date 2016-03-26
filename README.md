@@ -10,49 +10,23 @@ Whether you wish to preserve cityscapes or familiar places, Krate Labs is here t
 
 ## How to build SVG
 
-### Build Full Features
-
-**Python (Ubuntu)**
-
-Install
-
-```bash
-$ sudo apt-get update && apt-get install potrace -y
-$ git clone git@github.com:KrateLabs/KrateLabs.git
-$ cd KrateLabs
-$ pip install -r requirements.txt
-```
-
-```bash
-$ mkdir data
-$ python ./scripts/svg.py \
-  --lng -79.380 \
-  --lat 43.652 \
-  --zoom 10 \
-  --style mapbox://styles/addxy/cilvpgjqs001k9om1ay3jmb75 \
-  --filename Full
-```
-
-**Docker**
-
-Install
+### Install with Docker
 
 ```bash
 $ git clone git@github.com:KrateLabs/KrateLabs.git
 $ cd KrateLabs
 $ docker build kratelabs .
+OR
+$ make docker
 ```
 
 Running on Docker allows you to create map SVG from any Operating System without any issues.
 
 ```bash
-docker run -it --rm -v $HOME/data:/data kratelabs \
-  python svg.py \
-  --lng -79.380 \
-  --lat 43.652 \
-  --zoom 10 \
-  --style mapbox://styles/addxy/cilvpgjqs001k9om1ay3jmb75 \
-  --filename Full
+docker run -it --rm -v $HOME/data:/data kratelabs svg \
+  --location "Toronto, Ontario"
+  --zoom 12 \
+  --filename "Toronto"
 ```
 ### Mapbox Styles
 

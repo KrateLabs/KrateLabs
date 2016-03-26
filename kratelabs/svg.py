@@ -12,10 +12,11 @@ import click
 import os
 import requests
 import geocoder
+import sys
 
 
 @click.command()
-@click.option('--filename', default='temp', help='Output filename to SVG')
+@click.option('--filename', help='Filename output to SVG')
 @click.option('--lat', type=click.FLOAT, help='latitude for the center point of the static map; number between  -90 and  90')
 @click.option('--lng', type=click.FLOAT, help='longitude for the center point of the static map; number between  -180 and  180')
 @click.option('--location', help='Geographical Location based on Google Maps')
@@ -33,11 +34,22 @@ import geocoder
 @click.option('--delete', is_flag=True, default=False, help='[boolean] Delete PNG')
 def cli(filename, **kwargs):
     """Command Line Interface."""
-    print('Building: {}...'.format(filename))
-    check_options(**kwargs)
+    validate_options(**kwargs)
+    filename = get_filename(filename, **kwargs)
     create_png(filename, **kwargs)
     create_svg(filename, **kwargs)
     upload_aws_s3(filename, **kwargs)
+
+
+def get_filename(filename, **kwargs):
+    """Get filename."""
+    if filename:
+        return filename
+    elif kwargs['location']:
+        return kwargs['location']
+    else:
+        click.echo('[Error] Provide a --filename or --location \n')
+        cli(['--help'])
 
 
 def create_png(filename, **kwargs):
@@ -80,9 +92,11 @@ def get_latlng(**kwargs):
     if kwargs['location']:
         g = geocoder.google(kwargs['location'])
         if g.ok:
+            click.echo('Successfuly Geocoded: {} {}'.format(g.address, g.latlng))
             return g.latlng
         else:
-            raise ValueError('Could not geocode address: {}'.format(g.location))
+            click.echo('[Error] Could not geocode address: {} \n'.format(g.location))
+            cli(['--help'])
     else:
         return kwargs['lat'], kwargs['lng']
 
@@ -133,39 +147,48 @@ def parse_style(style):
         return username, style_id
 
 
-def check_options(**kwargs):
+def validate_options(**kwargs):
     """Verrify user input options."""
     # Lat lng
     if not kwargs['location']:
         lat, lng = kwargs['lat'], kwargs['lng']
 
         if not lat and not lng:
-            raise ValueError('Missing latitude & longitude')
+            click.echo('[Error] Missing latitude & longitude \n')
+            cli(['--help'])
 
         elif not lat:
-            raise ValueError('Missing latitude')
+            click.echo('[Error] Missing latitude \n')
+            cli(['--help'])
 
         elif not lng:
-            raise ValueError('Missing longitude')
+            click.echo('[Error] Missing longitude \n')
+            cli(['--help'])
 
         elif not -90 <= lat <= 90:
-            raise ValueError('Latitude must be within -90 to 90 degrees.')
+            click.echo('[Error] Latitude must be within -90 to 90 degrees. \n')
+            cli(['--help'])
 
         elif not -180 <= lng <= 180:
-            raise ValueError('Longitute must be within -180 to 180 degrees.')
+            click.echo('[Error] Longitute must be within -180 to 180 degrees. \n')
+            cli(['--help'])
 
     # Zoom Level
     if not kwargs['zoom']:
-        raise ValueError('Missing zoom level')
+        click.echo('[Error] Missing zoom level \n')
+        cli(['--help'])
 
     elif not 0 <= kwargs['zoom'] <= 22:
-        raise ValueError('Zoom level must be within 0 to 22.')
+        click.echo('[Error] Zoom level must be within 0 to 22. \n')
+        cli(['--help'])
 
     elif not 0 <= kwargs['pitch'] <= 60:
-        raise ValueError('Pitch must be within 0 to 60 degrees.')
+        click.echo('[Error] Pitch must be within 0 to 60 degrees. \n')
+        cli(['--help'])
 
     elif not 0 <= kwargs['bearing'] <= 360:
-        raise ValueError('Bearing must be within 0 to 360 degrees.')
+        click.echo('[Error] Bearing must be within 0 to 360 degrees. \n')
+        cli(['--help'])
 
 if __name__ == '__main__':
     cli()

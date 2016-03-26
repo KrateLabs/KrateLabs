@@ -16,4 +16,5 @@ ADD setup.py /code/setup.py
 ADD kratelabs /code/kratelabs
 RUN pip install .
 
+WORKDIR /data
 CMD svg --help
