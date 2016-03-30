@@ -3,7 +3,7 @@
 
 """Krate Labs.
 
-SVG module
+Command Line Interface Module
 """
 
 from __future__ import absolute_import
@@ -12,7 +12,6 @@ import click
 import os
 import requests
 import geocoder
-import sys
 
 
 @click.command()
@@ -191,6 +190,21 @@ def validate_options(**kwargs):
 
     elif not 0 <= kwargs['bearing'] <= 360:
         click.echo('[ERROR] Bearing must be within 0 to 360 degrees. \n')
+        cli(['--help'])
+
+    # Linux Requirements
+    try:
+        subprocess.call(['potrace', '--version'])
+    except OSError:
+        click.echo(
+            '[ERROR] Missing dependency, requires `Potrace`.\n'
+            'http://potrace.sourceforge.net/\n')
+        cli(['--help'])
+
+    try:
+        subprocess.call(['convert', '--version'])
+    except OSError:
+        click.echo('[ERROR] Missing dependency, requires `Image Magick`.')
         cli(['--help'])
 
 if __name__ == '__main__':

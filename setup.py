@@ -6,14 +6,18 @@ try:
 except ImportError:
     from distutils.core import setup
 
+with open('requirements.txt') as f:
+    REQUIRES = f.readlines()
+
 setup(
     name='kratelabs',
     version='0.1.0',
     description='Kratelab\'s helpful scripts for MapboxGL maps.',
     packages=['kratelabs'],
+    install_requires=[REQUIRES],
     entry_points={
         'console_scripts': [
-            'svg = kratelabs.svg:cli'
+            'kratelabs = kratelabs.cli:cli'
         ]
     }
 )

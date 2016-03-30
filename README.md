@@ -10,6 +10,24 @@ Whether you wish to preserve cityscapes or familiar places, Krate Labs is here t
 
 ## How to build SVG
 
+### Install Dependencies
+
+| Name        | Instructions |
+| ----------- | ------------ |
+| ImageMagick | brew install ImageMagick |
+| Potrace     | http://potrace.sourceforge.net |
+
+### Install with Python
+
+After installing the dependencies, you can install the CLI with `pip`.
+
+```
+$ git clone git@github.com:KrateLabs/KrateLabs.git
+$ cd KrateLabs
+$ pip install .
+$ kratelabs --help
+```
+
 ### Install with Docker
 
 Running on Docker allows you to create map SVG from any Operating System without any issues.
