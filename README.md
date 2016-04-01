@@ -10,7 +10,7 @@ Whether you wish to preserve cityscapes or familiar places, Krate Labs is here t
 
 ## Install
 
-**Using Makefile**
+**Simple Setup**
 
 ```bash
 $ git clone git@github.com:KrateLabs/KrateLabs.git
