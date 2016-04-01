@@ -8,58 +8,38 @@ Our contemporary designs highlights the cartography as the focal point as we fus
 
 Whether you wish to preserve cityscapes or familiar places, Krate Labs is here to provide meaningful art purchases by allowing each user to choose a location that is meaningful to them. Simply choose from a variety of templates that we currently have, or send a custom request, we’re here to help you create your customized art piece for your home or business.
 
-## How to build SVG
+## Install
 
-### Install Dependencies
+**Using Makefile**
 
-| Name        | Instructions |
-| ----------- | ------------ |
-| ImageMagick | brew install ImageMagick |
-| Potrace     | http://potrace.sourceforge.net |
-
-### Install with Python
-
-After installing the dependencies, you can install the CLI with `pip`.
-
-```
+```bash
 $ git clone git@github.com:KrateLabs/KrateLabs.git
 $ cd KrateLabs
-$ pip install .
+$ make
+$ kratelabs --location "CN Tower, Toronto" --zoom 12
+
+[OK] Geocoded: CN Tower, Toronto, ON M5V, Canada [43.6425657, -79.38705569999999]
+[OK] Created: CN Tower, Toronto.png
+[OK] Created: CN Tower, Toronto.svg
+```
+
+**Using Docker**
+
+```bash
+$ docker build -t kratelabs .
+$ docker run -it --rm -v $(pwd):/data kratelabs --location "CN Tower, Toronto" --zoom 12
+```
+
+## Command Line Interface
+
+```bash
 $ kratelabs --help
 ```
 
-### Install with Docker
-
-Running on Docker allows you to create map SVG from any Operating System without any issues.
-
-```bash
-$ git clone git@github.com:KrateLabs/KrateLabs.git
-$ cd KrateLabs
-$ docker build kratelabs .
-OR
-$ make
 ```
+Usage: kratelabs [OPTIONS]
 
-### Command Line Interface
-
-**Creating your first SVG**
-
-```bash
-docker run -it --rm -v $HOME/data:/data kratelabs svg \
---location "Toronto, Ontario"
---zoom 12 \
-```
-
-Getting help
-
-```bash
-docker run -it --rm kratelabs
-```
-
-Available options for CLI
-
-```bash
-Command Line Interface.
+  Command Line Interface.
 
 Options:
 --filename TEXT         Filename output to SVG

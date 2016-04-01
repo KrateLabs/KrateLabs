@@ -1,0 +1,6 @@
+#!/bin/sh
+sudo docker run \
+   -it --rm \
+   --name kratelabs \
+   -v $(pwd):/data \
+   kratelabs "$@"

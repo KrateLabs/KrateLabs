@@ -1,5 +1,5 @@
-docker:
-	./scripts/docker.sh
+build:
+	./scripts/build.sh
 
 clean:
 	./scripts/clean.sh

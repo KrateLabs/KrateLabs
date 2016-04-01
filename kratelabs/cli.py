@@ -16,9 +16,9 @@ import geocoder
 
 @click.command()
 @click.option('--filename', help='Filename output to SVG')
+@click.option('--location', help='Geographical Location based on Google Maps')
 @click.option('--lat', type=click.FLOAT, help='latitude for the center point of the static map; number between  -90 and  90')
 @click.option('--lng', type=click.FLOAT, help='longitude for the center point of the static map; number between  -180 and  180')
-@click.option('--location', help='Geographical Location based on Google Maps')
 @click.option('--zoom', type=click.FLOAT, help='zoom level; number between  0 and  22 . Fractional zoom levels will be rounded to two decimal places.')
 @click.option('--width', type=click.IntRange(1, 1280), default=1280, help='width of the image in pixels')
 @click.option('--height', type=click.IntRange(1, 1280), default=1280, help='height of the image in pixels')
@@ -66,19 +66,19 @@ def create_png(filename, **kwargs):
         'attribution': str(kwargs['attribution']).lower()
     }
     lat, lng = get_latlng(**kwargs)
-    url = 'https://api.mapbox.com/styles/v1/{username}/{style_id}/static/{lng},{lat},{zoom},{bearing},{pitch}/{width}x{height}{retina}'
-    url = url.format(
-        username=username,
-        style_id=style_id,
-        lng=lng,
-        lat=lat,
-        zoom=kwargs['zoom'],
-        bearing=kwargs['bearing'],
-        pitch=kwargs['pitch'],
-        width=kwargs['width'],
-        height=kwargs['height'],
-        retina=('', '@2x')[kwargs['retina']]
-    )
+    url = 'https://api.mapbox.com/styles/v1/{username}/{style_id}/static/' \
+          '{lng},{lat},{zoom},{bearing},{pitch}/{width}x{height}{retina}'.format(
+              username=username,
+              style_id=style_id,
+              lng=lng,
+              lat=lat,
+              zoom=kwargs['zoom'],
+              bearing=kwargs['bearing'],
+              pitch=kwargs['pitch'],
+              width=kwargs['width'],
+              height=kwargs['height'],
+              retina=('', '@2x')[kwargs['retina']]
+          )
     with open('{}.png'.format(filename), 'wb') as handle:
         response = requests.get(url, params=params, stream=True)
 
@@ -194,7 +194,7 @@ def validate_options(**kwargs):
 
     # Linux Requirements
     try:
-        subprocess.call(['potrace', '--version'])
+        subprocess.check_output(['potrace', '--version'])
     except OSError:
         click.echo(
             '[ERROR] Missing dependency, requires `Potrace`.\n'
@@ -202,8 +202,9 @@ def validate_options(**kwargs):
         cli(['--help'])
 
     try:
-        subprocess.call(['convert', '--version'])
-    except OSError:
+        subprocess.check_output(['convert', '--version'])
+    except OSError as e:
+        click.echo(e)
         click.echo('[ERROR] Missing dependency, requires `Image Magick`.')
         cli(['--help'])
 

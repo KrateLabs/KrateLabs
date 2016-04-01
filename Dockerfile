@@ -12,9 +12,11 @@ RUN pip install pip --upgrade
 RUN pip install -r requirements.txt
 
 # Install App
-ADD setup.py /code/setup.py
-ADD kratelabs /code/kratelabs
+COPY setup.py /code/setup.py
+COPY kratelabs /code/kratelabs
 RUN pip install .
 
 WORKDIR /data
-CMD kratelabs --help
+
+ENTRYPOINT ["kratelabs"]
+CMD ["--help"]

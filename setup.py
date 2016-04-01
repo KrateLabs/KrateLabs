@@ -11,7 +11,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='kratelabs',
-    version='0.1.0',
+    version='0.2.0',
     description='Kratelab\'s helpful scripts for MapboxGL maps.',
     packages=['kratelabs'],
     install_requires=[REQUIRES],
