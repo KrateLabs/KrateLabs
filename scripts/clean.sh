@@ -1,6 +1,6 @@
 #!/bin/sh
-CONTAINERS=$(sudo docker ps -a -q)
-IMAGES=$(sudo docker images -q)
+CONTAINERS=$(docker ps -a -q)
+IMAGES=$(docker images -q)
 
 # Remove all Docker Containers
 if [ -n "$CONTAINERS" ]; then

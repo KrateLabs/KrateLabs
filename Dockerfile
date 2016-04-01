@@ -16,7 +16,7 @@
 #
 
 # Base docker image
-FROM python:alpine
+FROM python:2-alpine
 MAINTAINER Denis Carriere <carriere.denis@gmail.com>
 
 # Install Potrace & imagemagick
