@@ -12,10 +12,12 @@ import click
 import os
 import requests
 import geocoder
+import json
 
 
 @click.command()
 @click.option('--filename', help='Filename output to SVG')
+@click.option('--folder', help='Folder output to SVG')
 @click.option('--location', help='Geographical Location based on Google Maps')
 @click.option('--lat', type=click.FLOAT, help='latitude for the center point of the static map; number between  -90 and  90')
 @click.option('--lng', type=click.FLOAT, help='longitude for the center point of the static map; number between  -180 and  180')
@@ -84,7 +86,7 @@ def create_png(filename, **kwargs):
 
         for block in response.iter_content(1024):
             handle.write(block)
-    click.echo('[OK] Created: {}.png'.format(filename))
+    # click.echo('[OK] Created: {}.png'.format(filename))
 
 
 def get_latlng(**kwargs):
@@ -117,24 +119,23 @@ def create_svg(filename, **kwargs):
     # -o, --output <filename>    - write all output to this file
     subprocess.call(['potrace', '--svg', '--output', '{}.svg'.format(filename), '{}.pnm'.format(filename)])
     os.remove('{}.pnm'.format(filename))
-    click.echo('[OK] Created: {}.svg'.format(filename))
-
-    # Remove extra files that are not needed anymore
-    if kwargs['delete']:
-        os.remove('{}.png'.format(filename))
-        click.echo('[OK] Deleted: {}.png'.format(filename))
+    # click.echo('[OK] Created: {}.svg'.format(filename))
 
 
-def upload_aws_s3(filename, **kwargs):
+def upload_aws_s3(basename, **kwargs):
     """Upload AWS S3 bucket."""
     if kwargs['upload']:
-        filename = '{}.svg'.format(filename)
-        s3_bucket = 'kratelabs.com'
-        s3_path = 's3://{}/{}'.format(s3_bucket, filename)
-        command = ['aws', 's3', 'cp', filename, s3_path, '--acl', 'public-read-write']
-        print(' '.join(command))
-        subprocess.call(command)
-        print('https://{}.s3.amazonaws.com/{}'.format(s3_bucket, kwargs['upload']))
+        result = {'status': 'ok'}
+        for extension in ['svg', 'png']:
+            filename = '{}.{}'.format(basename, extension)
+            s3_bucket = 'kratelabs.com'
+            s3_path = 's3://{}/product/{}/{}'.format(s3_bucket, kwargs['folder'], filename)
+            command = ['aws', 's3', 'cp', filename, s3_path, '--acl', 'public-read-write']
+            subprocess.call(command, stdout=open(os.devnull, 'wb'))
+            result[extension] = 'https://s3-us-west-2.amazonaws.com/{}/product/{}/{}'.format(s3_bucket, kwargs['folder'], filename)
+            if kwargs['delete']:
+                os.remove(filename)
+        click.echo(json.dumps(result))
 
 
 def parse_style(style):
