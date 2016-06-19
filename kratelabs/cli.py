@@ -44,6 +44,9 @@ def cli(filename, **kwargs):
 
 def get_filename(filename, **kwargs):
     """Get filename."""
+    directory = os.path.dirname(filename)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
     if filename:
         return filename
     elif kwargs['location']:
@@ -119,6 +122,7 @@ def create_svg(filename, **kwargs):
     # -o, --output <filename>    - write all output to this file
     subprocess.call(['potrace', '--svg', '--output', '{}.svg'.format(filename), '{}.pnm'.format(filename)])
     os.remove('{}.pnm'.format(filename))
+    click.echo("OK")
     # click.echo('[OK] Created: {}.svg'.format(filename))
 
 
