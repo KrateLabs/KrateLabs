@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 import program from 'commander'
 import shell from 'shelljs'
 
@@ -25,7 +27,7 @@ const within = (value, { minValue, maxValue, parser, description }) => {
 }
 
 program
-  .version('0.0.1')
+  .version('1.0.0')
   .command('create')
   .description('Creates Kratelabs image from Mapbox\'s static API')
   .option('--filename <path>', 'Filename output to SVG')

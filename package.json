@@ -4,7 +4,8 @@
   "description": "KrateLabs CLI",
   "main": "index.js",
   "scripts": {
-    "build": "babel cli.js -d bin"
+    "build": "babel cli.js -d bin",
+    "patch-release": "npm version patch && npm publish && git push --follow-tags"
   },
   "repository": {
     "type": "git",

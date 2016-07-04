@@ -5,6 +5,10 @@ var _commander = require('commander');
 
 var _commander2 = _interopRequireDefault(_commander);
 
+var _shelljs = require('shelljs');
+
+var _shelljs2 = _interopRequireDefault(_shelljs);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var customHelp = function customHelp() {

@@ -13,27 +13,15 @@ Whether you wish to preserve cityscapes or familiar places, Krate Labs is here t
 **Simple Setup**
 
 ```bash
-$ git clone git@github.com:KrateLabs/KrateLabs.git
-$ cd KrateLabs
-$ make
+$ npm install kratelabs-cli
 $ kratelabs --location "CN Tower, Toronto" --zoom 12
-
-[OK] Geocoded: CN Tower, Toronto, ON M5V, Canada [43.6425657, -79.38705569999999]
-[OK] Created: CN Tower, Toronto.png
-[OK] Created: CN Tower, Toronto.svg
 ```
 
-**Using Docker**
-
-```bash
-$ docker build -t kratelabs .
-$ docker run -it --rm -v $(pwd):/data kratelabs --location "CN Tower, Toronto" --zoom 12
-```
 
 ## Command Line Interface
 
 ```bash
-$ kratelabs --help
+$ kratelabs create --help
 ```
 
 ```
@@ -42,43 +30,30 @@ Usage: kratelabs [OPTIONS]
   Command Line Interface.
 
 Options:
---filename TEXT         Filename output to SVG
---lat FLOAT             latitude for the center point of the static map;
-                        number between  -90 and  90
---lng FLOAT             longitude for the center point of the static map;
-                        number between  -180 and  180
---location TEXT         Geographical Location based on Google Maps
---zoom FLOAT            zoom level; number between  0 and  22 . Fractional
-                        zoom levels will be rounded to two decimal places.
---width INTEGER RANGE   width of the image in pixels
---height INTEGER RANGE  height of the image in pixels
---style TEXT            mapbox://styles/{username}/{style_id}
---access_token TEXT     Mapbox access token
---bearing FLOAT         Rotates the map around its center. Number between 0
-                        and 360.
---pitch FLOAT           Tilts the map, producing a perspective effect.
-                        Number between 0 and 60.
---retina                [boolean] If  @2x is added to request a retina 2x
-                        image will be returned
---attribution           [boolean] Value controlling whether there is
-                        attribution on the image; defaults to  false
---logo                  [boolean] Value controlling whether there is a
-                        Mapbox logo on the image; defaults to  false
---upload                [boolean] Upload to AWS S3
---delete                [boolean] Delete PNG
---help                  Show this message and exit.
+  --filename TEXT         Filename output to SVG
+  --folder TEXT           Folder output to SVG
+  --location TEXT         Geographical Location based on Google Maps
+  --lat FLOAT             latitude for the center point of the static map;
+                          number between  -90 and  90
+  --lng FLOAT             longitude for the center point of the static map;
+                          number between  -180 and  180
+  --zoom FLOAT            zoom level; number between  0 and  22 . Fractional
+                          zoom levels will be rounded to two decimal places.
+  --width INTEGER RANGE   width of the image in pixels
+  --height INTEGER RANGE  height of the image in pixels
+  --style TEXT            mapbox://styles/{username}/{style_id}
+  --access_token TEXT     Mapbox access token
+  --bearing FLOAT         Rotates the map around its center. Number between 0
+                          and 360.
+  --pitch FLOAT           Tilts the map, producing a perspective effect.
+                          Number between 0 and 60.
+  --retina                [boolean] If  @2x is added to request a retina 2x
+                          image will be returned
+  --attribution           [boolean] Value controlling whether there is
+                          attribution on the image; defaults to  false
+  --logo                  [boolean] Value controlling whether there is a
+                          Mapbox logo on the image; defaults to  false
+  --upload                [boolean] Upload to AWS S3
+  --delete                [boolean] Delete PNG
+  --help                  Show this message and exit.
 ```
-
-### Mapbox Styles
-
-**All Features**
-
-- mapbox://styles/addxy/cim6u5lfi00k2cwm23exyzjim
-
-**Roads Only**
-
-- mapbox://styles/addxy/cim6u8zc300om9jm05ku5zurt
-
-**Water Only**
-
-- mapbox://styles/addxy/cim6u6b7t001l9klzpio0dhaa
