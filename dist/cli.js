@@ -5,6 +5,10 @@ var _commander = require('commander');
 
 var _commander2 = _interopRequireDefault(_commander);
 
+var _shelljs = require('shelljs');
+
+var _shelljs2 = _interopRequireDefault(_shelljs);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var customHelp = function customHelp() {
@@ -32,7 +36,7 @@ var within = function within(value, _ref) {
   process.exit(1);
 };
 
-_commander2.default.version('0.0.1').command('create').description('Creates Kratelabs image from Mapbox\'s static API').option('--filename <path>', 'Filename output to SVG').option('--folder [path]', 'Folder output to SVG').option('--location [location]', 'Geographical Location based on Google Maps').option('--lat <float>', 'latitude for the center point of the static map; number between  -90 and  90', function (value) {
+_commander2.default.version('1.0.0').command('create').description('Creates Kratelabs image from Mapbox\'s static API').option('--filename <path>', 'Filename output to SVG').option('--folder [path]', 'Folder output to SVG').option('--location [location]', 'Geographical Location based on Google Maps').option('--lat <float>', 'latitude for the center point of the static map; number between  -90 and  90', function (value) {
   return within(value, {
     minValue: -90,
     maxValue: 90,
