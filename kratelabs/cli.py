@@ -24,7 +24,7 @@ import json
 @click.option('--zoom', type=click.FLOAT, help='zoom level; number between  0 and  22 . Fractional zoom levels will be rounded to two decimal places.')
 @click.option('--width', type=click.IntRange(1, 1280), default=1280, help='width of the image in pixels')
 @click.option('--height', type=click.IntRange(1, 1280), default=1280, help='height of the image in pixels')
-@click.option('--style', default='mapbox://styles/addxy/cim6u5lfi00k2cwm23exyzjim', help='mapbox://styles/{username}/{style_id}')
+@click.option('--style', default='mapbox://styles/addxy/ciq40e6zx0010bkmbbo513b6s', help='mapbox://styles/{username}/{style_id}')
 @click.option('--access_token', default='pk.eyJ1IjoiYWRkeHkiLCJhIjoiY2lsdmt5NjZwMDFsdXZka3NzaGVrZDZtdCJ9.ZUE-LebQgHaBduVwL68IoQ', help='Mapbox access token')
 @click.option('--bearing', type=click.FLOAT, default=0, help='Rotates the map around its center. Number between 0 and 360.')
 @click.option('--pitch', type=click.FLOAT, default=0, help='Tilts the map, producing a perspective effect. Number between 0 and 60.')

@@ -1,4 +1,4 @@
-dist/
+build/
 env/
 *.egg-info/
 *.pyc
@@ -6,7 +6,8 @@ env/
 *.svg
 *.png
 *.pnm
-/data
+data/
+uploads/
 
 # Logs
 logs
