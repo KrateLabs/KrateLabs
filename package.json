@@ -1,6 +1,6 @@
 {
   "name": "kratelabs-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "KrateLabs CLI",
   "main": "index.js",
   "scripts": {
