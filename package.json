@@ -4,7 +4,7 @@
   "description": "KrateLabs CLI",
   "main": "index.js",
   "scripts": {
-    "build": "babel cli.js -d dist"
+    "build": "babel cli.js -d bin"
   },
   "repository": {
     "type": "git",
@@ -13,14 +13,15 @@
   "author": "",
   "license": "ISC",
   "bin": {
-    "kratelabs": "./dist/index.js"
+    "kratelabs": "dist/cli.js"
   },
   "bugs": {
     "url": "https://github.com/KrateLabs/KrateLabs-CLI/issues"
   },
   "homepage": "https://github.com/KrateLabs/KrateLabs-CLI#readme",
   "dependencies": {
-    "commander": "^2.9.0"
+    "commander": "^2.9.0",
+    "shelljs": "^0.7.0"
   },
   "devDependencies": {
     "babel-cli": "^6.10.1",

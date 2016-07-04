@@ -1,4 +1,5 @@
 import program from 'commander'
+import shell from 'shelljs'
 
 const customHelp = () => {
   console.log(`Examples:
