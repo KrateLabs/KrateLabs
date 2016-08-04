@@ -13,15 +13,21 @@ Whether you wish to preserve cityscapes or familiar places, Krate Labs is here t
 **Simple Setup**
 
 ```bash
-$ npm install kratelabs-cli
-$ kratelabs --location "CN Tower, Toronto" --zoom 12
+$ python setup.py install 
+// OR
+$ pip install .
 ```
-
 
 ## Command Line Interface
 
 ```bash
-$ kratelabs create --help
+$ kratelabs --access_token pk.eyJ1IjoiYWRkeHkiLCJhIjoiY2lsdmt5NjZwMDFsdXZka3NzaGVrZDZtdCJ9.ZUE-LebQgHaBduVwL68IoQ --filename ./uploads/products/57a39687648dc5e755b80756/57a39687648dc5e755b80756-full --lat 43.6501 --lng -79.3822 --zoom 12 --style mapbox://styles/addxy/ciq40e6zx0010bkmbbo513b6s
+```
+
+## Help
+
+```bash
+$ kratelabs --help
 ```
 
 ```
