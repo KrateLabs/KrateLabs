@@ -10,13 +10,14 @@ Whether you wish to preserve cityscapes or familiar places, Krate Labs is here t
 
 ## Install
 
-**Simple Setup**
-
 ```bash
-$ python setup.py install 
-// OR
+$ git clone git@github.com:KrateLabs/KrateLabs-CLI.git
+$ cd KrateLabs-CLI
 $ pip install .
+$ apt-get install potrace imagemagick
 ```
+
+
 
 ## Command Line Interface
 
